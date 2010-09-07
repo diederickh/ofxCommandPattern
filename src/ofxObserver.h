@@ -4,7 +4,7 @@
 #include <vector>
 #include <algorithm>
 #include <string>
-
+#include <iostream>
 #include "ofxObservableEvent.h"
 class ofxObservable;
 
@@ -15,13 +15,13 @@ public:
 };
 
 class ofxObservable {
-private:
+protected:
 	std::vector<ofxObserver*> observers;
 
 public:
 
 	// Add a *new* observer
-	void addObserver(ofxObserver* pObserver) {
+	virtual void addObserver(ofxObserver* pObserver) {
 		if(pObserver == NULL)
 			return;
 		if(observers.size() == 0) 
@@ -31,28 +31,29 @@ public:
 		}
 	}
 	
-	void deleteObserver(const ofxObserver* pObserver) {
+	virtual void deleteObserver(const ofxObserver* pObserver) {
 		std::vector<ofxObserver*>::iterator i = std::find(observers.begin(), observers.end(), pObserver);
 		if(i != observers.end()) {
 			observers.erase(i);
 		}
 		else {
-			cout << "Cannot delete observer, couldnt find it!\n";
+			std::cout << "Cannot delete observer, couldnt find it!\n";
 		}
 	}
 	
-	void notifyObservers(ofxObservableEvent* pEvent = NULL) {
+	virtual void notifyObservers(ofxObservableEvent* pEvent = NULL) {
+		std::cout << "observers: "<< observers.size() << std::endl;
 		std::vector<ofxObserver*>::reverse_iterator i = observers.rbegin();
 		while(i != observers.rend()) {
 			(*i++)->update(this, pEvent);
 		}
 	}
 	
-	void deleteObservers() {
+	virtual void deleteObservers() {
 		observers.clear();
 	}	
 	
-	int countObservers() const { 
+	virtual int countObservers() const { 
 		return (int)observers.size();
 	}
 };
