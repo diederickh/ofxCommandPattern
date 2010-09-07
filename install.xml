@@ -1,0 +1,11 @@
+<install>
+	<name>ofxCommandPattern</name>
+	<version>0.01</version>
+	<author>Diederick Huijbers</author>
+	<url></url>
+	<add>
+		<include>
+			<path>../../../addons_diederick/ofxCommandPattern/src/</path>
+		</include>
+	</add>
+</install>
