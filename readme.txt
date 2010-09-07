@@ -15,17 +15,6 @@ helpfull when working on multi threaded applications; each command
 can run in a separate thread and you can schedule which command should be 
 executed before another one.
 
-Mac + Windows Installation:
-=============
-1. 
-Add the code of this addon to your application. See the example for some
-information on how to implement a basic controller that uses the 
-command pattern.
-
-2.
-Also make sure to add the ofxThread to your project.
-
-
 
 
 
