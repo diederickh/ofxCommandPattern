@@ -42,10 +42,12 @@ public:
 	}
 	
 	virtual void notifyObservers(ofxObservableEvent* pEvent = NULL) {
-		std::cout << "observers: "<< observers.size() << std::endl;
+		//std::cout << "observers: "<< observers.size() << std::endl;
 		std::vector<ofxObserver*>::reverse_iterator i = observers.rbegin();
 		while(i != observers.rend()) {
-			(*i++)->update(this, pEvent);
+			ofxObserver* observer = (*i);
+			observer->update(this, pEvent);
+			++i;
 		}
 	}
 	

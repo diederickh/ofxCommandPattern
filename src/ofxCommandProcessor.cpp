@@ -3,6 +3,7 @@
 #include "ofMain.h"
 
 void ofxCommandProcessor::enqueue(ofxCommand* pCommand) {
+	//std::cout << "Add command" << std::endl;
 	lock();
 	queue.push_back(pCommand);
 	unlock();
@@ -12,8 +13,8 @@ void ofxCommandProcessor::clear() {
 	lock();
 	std::deque<ofxCommand*>::iterator it = queue.begin();
 	while (it != queue.end()) {
-			delete (*it);
-			++it;
+		delete (*it);
+		++it;
 	}
 	queue.clear();
 	unlock();
@@ -22,6 +23,7 @@ void ofxCommandProcessor::clear() {
 bool ofxCommandProcessor::isReady() {
 	lock();
 	bool ready = queue.empty();
+	std::cout << "still : " << queue.size() << " commands in queue.\n";
 	unlock();
 	return ready;
 }
