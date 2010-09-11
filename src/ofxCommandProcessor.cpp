@@ -2,62 +2,70 @@
 #include "ofxCommand.h"
 #include "ofMain.h"
 
+ofxCommandProcessor::ofxCommandProcessor(){
+	
+}
+
+ofxCommandProcessor::~ofxCommandProcessor() {
+	std::cout << ">>>> ~ofxCommandProcessor" << std::endl;
+}
+
 void ofxCommandProcessor::enqueue(ofxCommand* pCommand) {
-	//std::cout << "Add command" << std::endl;
-	lock();
 	queue.push_back(pCommand);
-	unlock();
 }
 
 void ofxCommandProcessor::clear() {
-	lock();
 	std::deque<ofxCommand*>::iterator it = queue.begin();
 	while (it != queue.end()) {
 		delete (*it);
 		++it;
 	}
 	queue.clear();
-	unlock();
+}
+
+void ofxCommandProcessor::remove(std::string sName) {
+	std::deque<ofxCommand*>::iterator it =  queue.begin();
+	while(it != queue.end()) {
+		if( (*it)->name == sName) {
+			delete (*it);
+			it = queue.erase(it);
+		}
+		else
+			++it;
+		//std::cout << ">> In queue: " << (*it++)->name << std::endl;
+	}
 }
 
 bool ofxCommandProcessor::isReady() {
-	lock();
 	bool ready = queue.empty();
-	std::cout << "still : " << queue.size() << " commands in queue.\n";
-	unlock();
+	std::deque<ofxCommand*>::iterator it =  queue.begin();
+	while(it != queue.end()) {
+		std::cout << ">> In queue: " << (*it++)->name << std::endl;
+	}
 	return ready;
 }
 
 
 ofxCommand* ofxCommandProcessor::take() {
-	ofxCommand* command = NULL;
-	lock();
-		while (queue.empty() && threadRunning) {
-			ofSleepMillis(10);
-		}
-
-		if (threadRunning){
-			command = queue.front();
-			queue.pop_front();
-		}
-	unlock();
+	if(queue.empty())
+		return NULL;
+	ofxCommand* command = queue.front();
+	queue.pop_front();
 	return command;
 }
 
-
-void ofxCommandProcessor::threadedFunction() {
-	while(1) {
-		ofSleepMillis(1);
-		ofxCommand* command = take();
-		if(command != NULL) {
-			bool complete = command->execute();
-			if(!complete) {
-				ofSleepMillis(500);
-				enqueue(command);
-			}
-			else {	
-				delete command;
-			}
+void ofxCommandProcessor::update() {
+	ofxCommand* command = take();
+	if(command != NULL) {
+		bool complete = command->execute();
+		if(!complete) {
+			queue.push_front(command); // we want to repeat it directly! (not at the end)
+			//ofSleepMillis(1);
+			//enqueue(command);
+		}
+		else {	
+			// @todo something wrong here! we need to use a boost::ptr_deque
+			delete command;
 		}
 	}
 }

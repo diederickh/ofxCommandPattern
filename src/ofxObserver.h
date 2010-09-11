@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <string>
 #include <iostream>
+#include <boost/thread.hpp>
 #include "ofxObservableEvent.h"
 class ofxObservable;
 
@@ -41,7 +42,8 @@ public:
 		}
 	}
 	
-	virtual void notifyObservers(ofxObservableEvent* pEvent = NULL) {
+	void notifyObservers(ofxObservableEvent* pEvent = NULL) {
+		//std::cout << "notify observers in ofxObservable: " << boost::this_thread::get_id() << std::endl;
 		//std::cout << "observers: "<< observers.size() << std::endl;
 		std::vector<ofxObserver*>::reverse_iterator i = observers.rbegin();
 		while(i != observers.rend()) {
