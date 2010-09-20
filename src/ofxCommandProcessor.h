@@ -25,7 +25,7 @@ public:
 
 protected:
 	std::deque<ofxCommand*>  queue;
-	ofxCommand* take();
+	virtual ofxCommand* take();
 };
 
 #endif
