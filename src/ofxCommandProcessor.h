@@ -13,11 +13,11 @@ class ofxCommandProcessor  {
 public:
 	ofxCommandProcessor();
 	~ofxCommandProcessor();
-	void enqueue(ofxCommand* pCommand);
-	void remove(std::string sName);
-	void clear();
-	bool isReady();
-	void update();
+	virtual void enqueue(ofxCommand* pCommand);
+	virtual void remove(std::string sName);
+	virtual void clear();
+	virtual bool isReady();
+	virtual void update();
 /*
 	void operator()() {
 		std::cout << "ofxCommanProcessor() operator: ()" << std::endl;
@@ -31,7 +31,7 @@ protected:
 	//boost::thread thread_;
 	std::deque<ofxCommand*>  queue;
 	//virtual void threadedFunction();
-	ofxCommand* take();
+	virtual ofxCommand* take();
 	//boost::mutex mutex;
 	//bool is_running;
 };

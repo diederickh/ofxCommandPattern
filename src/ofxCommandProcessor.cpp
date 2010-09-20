@@ -62,7 +62,7 @@ void ofxCommandProcessor::update() {
 		bool complete = command->execute();
 		if(!complete) {
 			queue.push_front(command); // we want to repeat it directly! (not at the end)
-			//ofSleepMillis(1);
+			ofSleepMillis(500);
 			//enqueue(command);
 		}
 		else {
