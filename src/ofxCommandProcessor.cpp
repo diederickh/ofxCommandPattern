@@ -3,7 +3,7 @@
 #include "ofMain.h"
 
 ofxCommandProcessor::ofxCommandProcessor(){
-	
+
 }
 
 ofxCommandProcessor::~ofxCommandProcessor() {
@@ -39,9 +39,11 @@ void ofxCommandProcessor::remove(std::string sName) {
 bool ofxCommandProcessor::isReady() {
 	bool ready = queue.empty();
 	std::deque<ofxCommand*>::iterator it =  queue.begin();
+	/*
 	while(it != queue.end()) {
 		std::cout << ">> In queue: " << (*it++)->name << std::endl;
 	}
+	*/
 	return ready;
 }
 
@@ -63,7 +65,7 @@ void ofxCommandProcessor::update() {
 			//ofSleepMillis(1);
 			//enqueue(command);
 		}
-		else {	
+		else {
 			// @todo something wrong here! we need to use a boost::ptr_deque
 			delete command;
 		}
