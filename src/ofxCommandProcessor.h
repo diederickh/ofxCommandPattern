@@ -9,12 +9,20 @@ class ofxCommandProcessor  {
 public:
 	ofxCommandProcessor();
 	~ofxCommandProcessor();
-	void enqueue(ofxCommand* pCommand);
-	void remove(std::string sName);
-	void clear();
-	bool isReady();
-	void update();
-	void shutdown();
+	virtual void enqueue(ofxCommand* pCommand);
+	virtual void remove(std::string sName);
+	virtual void clear();
+	virtual bool isReady();
+	virtual void update();
+/*
+	void operator()() {
+		std::cout << "ofxCommanProcessor() operator: ()" << std::endl;
+		run();
+	}
+	*/
+	//void start();
+	//void run();
+
 protected:
 	std::deque<ofxCommand*>  queue;
 	ofxCommand* take();
