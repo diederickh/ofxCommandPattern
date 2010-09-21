@@ -2,8 +2,8 @@
 #include "ofxCommand.h"
 #include "ofMain.h"
 
-ofxCommandProcessor::ofxCommandProcessor(){
-	
+ofxCommandProcessor::ofxCommandProcessor()
+{
 }
 
 ofxCommandProcessor::~ofxCommandProcessor() {
@@ -26,22 +26,26 @@ void ofxCommandProcessor::clear() {
 void ofxCommandProcessor::remove(std::string sName) {
 	std::deque<ofxCommand*>::iterator it =  queue.begin();
 	while(it != queue.end()) {
+		//std::cout << ">> In queue: " << (*it++)->name << std::endl;
 		if( (*it)->name == sName) {
 			delete (*it);
 			it = queue.erase(it);
 		}
 		else
 			++it;
-		//std::cout << ">> In queue: " << (*it++)->name << std::endl;
+		
 	}
 }
 
 bool ofxCommandProcessor::isReady() {
 	bool ready = queue.empty();
 	std::deque<ofxCommand*>::iterator it =  queue.begin();
+
+	
 	while(it != queue.end()) {
 		std::cout << ">> In queue: " << (*it++)->name << std::endl;
 	}
+	
 	return ready;
 }
 
@@ -60,16 +64,14 @@ void ofxCommandProcessor::update() {
 		bool complete = command->execute();
 		if(!complete) {
 			queue.push_front(command); // we want to repeat it directly! (not at the end)
-			//ofSleepMillis(1);
-			//enqueue(command);
 		}
-		else {	
+		else {
 			// @todo something wrong here! we need to use a boost::ptr_deque
+
 			delete command;
 		}
 	}
 }
-
 
 
 
