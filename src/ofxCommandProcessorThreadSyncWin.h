@@ -1,5 +1,5 @@
-#ifndef OFXCOMMANDPATTERNTHREADSYNCH
-#define OFXCOMMANDPATTERNTHREADSYNCH
+#ifndef OFXCOMMANDPATTERNTHREADSYNCWINH
+#define OFXCOMMANDPATTERNTHREADSYNCWINH
 
 #include <windows.h>
 #include <process.h>
@@ -10,7 +10,7 @@ protected:
 	bool acquired;
 
 public:
-	ofxCommandProcessorThreadSync()
+	ofxCommandProcessorThreadSyncWin()
 		:mutex_handle(NULL)
 		,acquired(false)
 	{
@@ -20,7 +20,7 @@ public:
 		}
 	}
 
-	virtual ~ofxCommandProcessorThreadSync() {
+	virtual ~ofxCommandProcessorThreadSyncWin() {
 		unlock();
 		CloseHandle(mutex_handle);
 	}

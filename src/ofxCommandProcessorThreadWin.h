@@ -9,7 +9,7 @@
 #if defined( __WIN32__ ) || defined( _WIN32 )
 	#include <windows.h>
 	#include <process.h>
-
+	#include "ofxCommandProcessorThreadSyncWin.h"
 
 	class ofxCommandProcessorThreadWin : public ofxCommandProcessor, public ofxCommandProcessorThread {
 	protected:
