@@ -41,11 +41,12 @@ bool ofxCommandProcessor::isReady() {
 	bool ready = queue.empty();
 	std::deque<ofxCommand*>::iterator it =  queue.begin();
 
-	
+
+	#ifdef LOG_OFXCOMMANDPATTERN
 	while(it != queue.end()) {
 		std::cout << ">> In queue: " << (*it++)->name << std::endl;
 	}
-	
+	#endif
 	return ready;
 }
 
