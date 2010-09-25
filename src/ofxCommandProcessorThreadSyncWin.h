@@ -32,6 +32,7 @@ public:
 				acquired = true;
 			}
 		}
+		return acquired;
 	}
 
 	virtual void unlock() const {

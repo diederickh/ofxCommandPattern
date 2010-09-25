@@ -4,6 +4,7 @@ bool ofxCommandProcessorThreadMac::start() {
 	thread_ptr = boost::shared_ptr<boost::thread>(new boost::thread(
 		boost::bind(&ofxCommandProcessorThreadMac::run, this)
 	));
+	return true;
 }
 
 void ofxCommandProcessorThreadMac::join() {
