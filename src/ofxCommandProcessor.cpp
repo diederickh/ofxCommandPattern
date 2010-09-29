@@ -1,6 +1,7 @@
 #include "ofxCommandProcessor.h"
 #include "ofxCommand.h"
 #include "ofMain.h"
+#include "ofxLog.h"
 
 ofxCommandProcessor::ofxCommandProcessor()
 {
@@ -11,6 +12,7 @@ ofxCommandProcessor::~ofxCommandProcessor() {
 }
 
 void ofxCommandProcessor::enqueue(ofxCommand* pCommand) {
+    OFXLOG("ofxCommandProcessor::enqueue() command:" << pCommand->name);
 	queue.push_back(pCommand);
 }
 
@@ -24,16 +26,18 @@ void ofxCommandProcessor::clear() {
 }
 
 void ofxCommandProcessor::remove(std::string sName) {
+    OFXLOG("ofxCommandProcessor::remove() command:" << sName);
 	std::deque<ofxCommand*>::iterator it =  queue.begin();
 	while(it != queue.end()) {
 		//std::cout << ">> In queue: " << (*it++)->name << std::endl;
 		if( (*it)->name == sName) {
+		    OFXLOG("ofxCommandProcessor::remove() - delete pointer:" << sName);
 			delete (*it);
 			it = queue.erase(it);
 		}
 		else
 			++it;
-		
+
 	}
 }
 
@@ -68,7 +72,7 @@ void ofxCommandProcessor::update() {
 		}
 		else {
 			// @todo something wrong here! we need to use a boost::ptr_deque
-
+            OFXLOG("ofxCommandProcessor::update() delete:" << command->name);
 			delete command;
 		}
 	}

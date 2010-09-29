@@ -4,7 +4,7 @@
 
 class ofxCommand {
 public:
-	ofxCommand(std::string sName):name(sName) {};
+	ofxCommand(std::string sName = ""):name(sName) {};
 	virtual bool execute() = 0;
 	std::string name;
 };

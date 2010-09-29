@@ -1,4 +1,5 @@
 #include "ofxCommandProcessorThreadWin.h"
+#include "ofxLog.h"
 #if defined( __WIN32__ ) || defined( _WIN32 )
 	ofxCommandProcessorThreadWin::ofxCommandProcessorThreadWin()
 	:running_(false)
@@ -7,11 +8,6 @@
 	{
 
 	}
-	//
-	//bool ofxCommandProcessorThreadWin::start() {
-	//	thread_handle_ = (HANDLE)_beginthread(threadProc,0,this);
-	//	return (thread_handle_ != NULL);
-	//}
 
 	void ofxCommandProcessorThreadWin::join() {
 		if(thread_handle_) {
@@ -25,9 +21,9 @@
 		}
 	}
 
-	
 	void ofxCommandProcessorThreadWin::enqueue(ofxCommand* pCommand) {
 		sync_.lock();
+		OFXLOG("ofxCommandProcessorThreadWin: enqueue.")
 		ofxCommandProcessor::enqueue(pCommand);
 		sync_.notify();
 		sync_.unlock();
@@ -87,6 +83,7 @@
 					//enqueue(command);
 				}
 				else {
+				    OFXLOG("ofxCommandProcessorThreadWin::run() delete command:" << command->name);
 					delete command;
 				}
 			}
