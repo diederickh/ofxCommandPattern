@@ -14,7 +14,8 @@ class ofxObservable;
 class ofxObserver {
 public:
 	//virtual void update(ofxObservable* pFrom, ofxObservableEvent* pEvent) = 0;
-	virtual void update(boost::shared_ptr<ofxObservable> pFrom, boost::shared_ptr<ofxObservableEvent> pEvent) = 0;
+	//virtual void update(boost::shared_ptr<ofxObservable> pFrom, boost::shared_ptr<ofxObservableEvent> pEvent) = 0;
+	virtual void update(ofxObservable& pFrom, const ofxObservableEvent& pEvent) = 0;
 };
 
 class ofxObservable : public boost::enable_shared_from_this<ofxObservable> {
@@ -49,7 +50,8 @@ public:
 	}
 
 	//void notifyObservers(ofxObservableEvent* pEvent = NULL) {
-	void notifyObservers(boost::shared_ptr<ofxObservableEvent> pEvent) {
+	virtual void notifyObservers(ofxObservableEvent& pEvent) {
+	//void notifyObservers(boost::shared_ptr<ofxObservableEvent> pEvent) {
 		//std::cout << "notify observers in ofxObservable: " << boost::this_thread::get_id() << std::endl;
 		//std::cout << "observers: "<< observers.size() << std::endl;
 		//std::vector<ofxObserver*>::reverse_iterator i = observers.rbegin();
@@ -57,8 +59,9 @@ public:
 		while(i != observers.rend()) {
 			//ofxObserver* observer = (*i);
 			boost::shared_ptr<ofxObserver> observer = (*i);
-			boost::shared_ptr<ofxObservable> me(shared_from_this());
-			observer->update(me, pEvent);
+			//boost::shared_ptr<ofxObservable> me(shared_from_this());
+			//observer->update(me, pEvent);
+			observer->update(*this, pEvent);
 			++i;
 		}
 	}
