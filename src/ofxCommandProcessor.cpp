@@ -11,28 +11,35 @@ ofxCommandProcessor::~ofxCommandProcessor() {
 	std::cout << ">>>> ~ofxCommandProcessor" << std::endl;
 }
 
-void ofxCommandProcessor::enqueue(ofxCommand* pCommand) {
+//void ofxCommandProcessor::enqueue(ofxCommand* pCommand) {
+void ofxCommandProcessor::enqueue(boost::shared_ptr<ofxCommand> pCommand) {
     OFXLOG("ofxCommandProcessor::enqueue() command:" << pCommand->name);
 	queue.push_back(pCommand);
 }
 
 void ofxCommandProcessor::clear() {
-	std::deque<ofxCommand*>::iterator it = queue.begin();
+	//std::deque<ofxCommand*>::iterator it = queue.begin();
+	//boost::ptr_deque<ofxCommand>::iterator it = queue.begin();
+
+	/*
 	while (it != queue.end()) {
 		delete (*it);
 		++it;
 	}
+	*/
 	queue.clear();
 }
 
 void ofxCommandProcessor::remove(std::string sName) {
     OFXLOG("ofxCommandProcessor::remove() command:" << sName);
-	std::deque<ofxCommand*>::iterator it =  queue.begin();
+	//boost::ptr_deque<ofxCommand>::iterator it =  queue.begin();
+	std::deque<boost::shared_ptr<ofxCommand> >::iterator it = queue.begin();
 	while(it != queue.end()) {
 		//std::cout << ">> In queue: " << (*it++)->name << std::endl;
+		//if( (*it)->name == sName) { // for boost
 		if( (*it)->name == sName) {
 		    OFXLOG("ofxCommandProcessor::remove() - delete pointer:" << sName);
-			delete (*it);
+			//delete (*it); // for boost
 			it = queue.erase(it);
 		}
 		else
@@ -43,10 +50,11 @@ void ofxCommandProcessor::remove(std::string sName) {
 
 bool ofxCommandProcessor::isReady() {
 	bool ready = queue.empty();
-	std::deque<ofxCommand*>::iterator it =  queue.begin();
+	//boost::ptr_deque<ofxCommand>::iterator it =  queue.begin();
 
 
 	#ifdef LOG_OFXCOMMANDPATTERN
+	std::deque<boost::shared_ptr<ofxCommand> >::iterator it = queue.begin()
 	while(it != queue.end()) {
 		std::cout << ">> In queue: " << (*it++)->name << std::endl;
 	}
@@ -55,16 +63,22 @@ bool ofxCommandProcessor::isReady() {
 }
 
 
-ofxCommand* ofxCommandProcessor::take() {
+//ofxCommand* ofxCommandProcessor::take() {
+boost::shared_ptr<ofxCommand> ofxCommandProcessor::take() {
+	boost::shared_ptr<ofxCommand> command;
 	if(queue.empty())
-		return NULL;
-	ofxCommand* command = queue.front();
+        return command;
+	//if(queue.empty())
+	//	return NULL; // what should I return here?
+	command = queue.front();
+	//boost::shared_ptr<ofxCommand> command = queue.front();
 	queue.pop_front();
 	return command;
 }
 
 void ofxCommandProcessor::update() {
-	ofxCommand* command = take();
+	boost::shared_ptr<ofxCommand> command = take();
+	//ofxCommand* command = take();
 	if(command != NULL) {
 		bool complete = command->execute();
 		if(!complete) {
@@ -73,7 +87,7 @@ void ofxCommandProcessor::update() {
 		else {
 			// @todo something wrong here! we need to use a boost::ptr_deque
             OFXLOG("ofxCommandProcessor::update() delete:" << command->name);
-			delete command;
+			//delete command;
 		}
 	}
 }

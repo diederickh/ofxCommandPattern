@@ -5,6 +5,7 @@
 #include "ofxCommandProcessor.h"
 #include "ofxCommandProcessorThread.h"
 #include "ofxCommandProcessorThreadSync.h"
+#include <boost/shared_ptr.hpp>
 
 #if defined( __WIN32__ ) || defined( _WIN32 )
 	#include <windows.h>
@@ -27,7 +28,8 @@
 
 		virtual void sleep(int nMillis);
 		virtual void join();
-		virtual void enqueue(ofxCommand* pCommand);
+		//virtual void enqueue(ofxCommand* pCommand);
+		virtual void enqueue(boost::shared_ptr<ofxCommand> pCommand);
 		virtual void remove(std::string sName);
 		virtual void clear();
 		virtual bool isReady();
@@ -45,7 +47,9 @@
 			_endthread();
 		}
 
-		virtual ofxCommand* take();
+		//virtual ofxCommand* take();
+		//virtual ofxCommand* take();
+		boost::shared_ptr<ofxCommand> take();
 	};
 	#endif
 #endif

@@ -21,7 +21,8 @@
 		}
 	}
 
-	void ofxCommandProcessorThreadWin::enqueue(ofxCommand* pCommand) {
+	//void ofxCommandProcessorThreadWin::enqueue(ofxCommand* pCommand) {
+	void ofxCommandProcessorThreadWin::enqueue(boost::shared_ptr<ofxCommand> pCommand) {
 		sync_.lock();
 		OFXLOG("ofxCommandProcessorThreadWin: enqueue.")
 		ofxCommandProcessor::enqueue(pCommand);
@@ -52,8 +53,10 @@
 
 	}
 
-	ofxCommand* ofxCommandProcessorThreadWin::take() {
-		ofxCommand* command = NULL;
+	//ofxCommand* ofxCommandProcessorThreadWin::take() {
+	boost::shared_ptr<ofxCommand> ofxCommandProcessorThreadWin::take() {
+	    boost::shared_ptr<ofxCommand>command;
+		//ofxCommand* command = NULL;
 		sync_.lock();
 		while(queue.empty() && running_) {
 			sync_.wait(10);
@@ -71,8 +74,10 @@
 		running_ = true;
 		while(running_) {
 			sleep(1);
-			ofxCommand* command = take();
-			if(command != NULL) {
+			//ofxCommand* command = take();
+			boost::shared_ptr<ofxCommand> command = take();
+			if(command) {
+			//if(command != NULL) {
 				bool complete = command->execute();
 				//std::cout << "Running: " << command->name << std::endl;
 				if(complete == false) {
@@ -84,7 +89,7 @@
 				}
 				else {
 				    OFXLOG("ofxCommandProcessorThreadWin::run() delete command:" << command->name);
-					delete command;
+					//delete command; // not necessary with shared_ptr
 				}
 			}
 		}
