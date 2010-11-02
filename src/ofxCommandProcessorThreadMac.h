@@ -18,14 +18,15 @@ public:
 	virtual void sleep(int nMillis);
 	virtual void run();
 	
-	virtual void enqueue(ofxCommand* pCommand);
+	virtual void enqueue(boost::shared_ptr<ofxCommand> pCommand);
 	virtual void remove(std::string sName);
 	virtual void clear();
 	virtual bool isReady();
 	virtual void update();
 	
 protected:	
-	virtual ofxCommand* take();
+	virtual boost::shared_ptr<ofxCommand> take();
+	//virtual ofxCommand* take();
 
 private:
 	boost::mutex mutex_;

@@ -24,7 +24,8 @@ void ofxCommandProcessorThreadMac::run() {
 }
 
 //--
-void ofxCommandProcessorThreadMac::enqueue(ofxCommand* pCommand) {
+
+void ofxCommandProcessorThreadMac::enqueue(boost::shared_ptr<ofxCommand> pCommand) {
 	boost::mutex::scoped_lock sl(mutex_);
 	ofxCommandProcessor::enqueue(pCommand);
 }
@@ -48,8 +49,7 @@ bool ofxCommandProcessorThreadMac::isReady() {
 void ofxCommandProcessorThreadMac::update() {
 }
 
-ofxCommand* ofxCommandProcessorThreadMac::take() {
+boost::shared_ptr<ofxCommand> ofxCommandProcessorThreadMac::take() {
 	boost::mutex::scoped_lock sl(mutex_);
-	ofxCommand* cmd = ofxCommandProcessor::take();
-	return cmd;
+	return ofxCommandProcessor::take();
 }
